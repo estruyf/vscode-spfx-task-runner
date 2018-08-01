@@ -3,6 +3,7 @@
   "displayName": "SPFx Task Runner",
   "description": "Easily run SPFx tasks to spin up the server, package the solution and more...",
   "version": "0.0.1",
+  "icon": "assets/spfx-taskrunner.png",
   "publisher": "eliostruyf",
   "contributors": [
     "Struyf, Elio <info@estruyf.be>"
