@@ -1,0 +1,89 @@
+{
+  "name": "vscode-spfx-task-runner",
+  "displayName": "SPFx Task Runner",
+  "description": "Easily run SPFx tasks to spin up the server, package the solution and more...",
+  "version": "0.0.1",
+  "publisher": "eliostruyf",
+  "contributors": [
+    "Struyf, Elio <info@estruyf.be>"
+  ],
+  "keywords": [
+    "SharePoint",
+    "Framework",
+    "Tasks",
+    "SPFx",
+    "gulp"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/estruyf/vscode-spfx-task-runner"
+  },
+  "engines": {
+    "vscode": "^1.25.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/config/package-solution.json"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "spfxTaskRunner.list",
+        "title": "List all gulp tasks"
+      },
+      {
+        "command": "spfxTaskRunner.pkgDebug",
+        "title": "Create debug package"
+      },
+      {
+        "command": "spfxTaskRunner.pkgRelease",
+        "title": "Create release package"
+      },
+      {
+        "command": "spfxTaskRunner.serve",
+        "title": "SPFx start local server"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "spfxProjectCheck",
+          "command": "spfxTaskRunner.serve",
+          "group": "gulpTasks@1"
+        },
+        {
+          "command": "spfxTaskRunner.list",
+          "group": "gulpTasks@2"
+        },
+        {
+          "when": "spfxProjectCheck",
+          "command": "spfxTaskRunner.pkgDebug",
+          "group": "gulpTasks@3"
+        },
+        {
+          "when": "spfxProjectCheck",
+          "command": "spfxTaskRunner.pkgRelease",
+          "group": "gulpTasks@4"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6",
+    "tslint": "^5.8.0",
+    "@types/node": "^7.0.43",
+    "@types/mocha": "^2.2.42"
+  }
+}
