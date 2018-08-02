@@ -91,4 +91,30 @@ export class TaskRunner {
       }           
     }
   }
+
+  /**
+   * Show task options
+   */
+  public static async showOptions() {
+    // Get all gulp tasks
+    const tasks = await vscode.tasks.fetchTasks({ type: "gulp" });
+    // Let the dev choose the task to run
+    const pickedTask = await vscode.window.showQuickPick(tasks.map(t => t.name), { canPickMany: false, placeHolder: "Pick the task to run"});
+    // Check if a task was picked
+    if (pickedTask) {
+      vscode.window.showInformationMessage(`Starting the ${pickedTask} task`);
+      try {
+        const task = tasks.find(t => t.name === pickedTask);
+        if (task) {
+          await vscode.tasks.executeTask(task);
+        } else {
+          vscode.window.showErrorMessage(`Didn't find the selected task...`);
+        }
+      } catch (error) {
+        if (error.stack) {
+          vscode.window.showErrorMessage(error.stack);
+        }
+      }  
+    }
+  }
 }

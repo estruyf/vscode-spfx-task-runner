@@ -1,6 +1,6 @@
 # SharePoint Framework Task Runner Extension for Visual Studio Code
 
-This extension allows you to easily run SharePoint Framework tasks with a couple of mouse clicks. At the moment you can for example list all the available gulp tasks in your project, start the local development server and create debug or release solution packages.
+This extension allows you to easily run SharePoint Framework tasks with a couple of mouse clicks. At the moment you can for example list all the available gulp tasks in your project, start the local development server and create debug or release solution packages or pick a task to run from the list of available tasks.
 
 ## Usage
 
@@ -15,6 +15,10 @@ When you, for example, click on `SPFx start local server` it will execute the `g
 If you want to know which `gulp` tasks are available, you can click on the `List all gulp tasks` action and it will present you a list like this (this varies depending on the custom gulp tasks you might have defined):
 
 ![Gulp tasks](./assets/gulp-tasks.png)
+
+You can also pick one of the available gulp tasks by clicking on `Pick a task to run`. This gives you a list of available tasks of which you can pick one to run:
+
+![Pick a task and run](./assets/pick-task-vscode.gif)
 
 ## Keyboard bindings
 

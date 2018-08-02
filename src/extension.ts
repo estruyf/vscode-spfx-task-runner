@@ -40,7 +40,11 @@ export function activate(context: vscode.ExtensionContext) {
   let serve = vscode.commands.registerCommand('spfxTaskRunner.serve', async () => {
     await TaskRunner.serve();
   });
-  
+
+  // Start serving the local server
+  let pickTask = vscode.commands.registerCommand('spfxTaskRunner.pickTask', async () => {
+    await TaskRunner.showOptions();
+  });
   
   // Fix to only show the menu actions when the extension activation conditions were met
   vscode.commands.executeCommand('setContext', 'spfxProjectCheck', true);
@@ -50,7 +54,8 @@ export function activate(context: vscode.ExtensionContext) {
     taskList,
     pkgDebug,
     pkgRelease,
-    serve
+    serve,
+    pickTask
   );
 }
 

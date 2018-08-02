@@ -2,7 +2,7 @@
   "name": "vscode-spfx-task-runner",
   "displayName": "SPFx Task Runner",
   "description": "Easily run SPFx tasks to spin up the server, package the solution and more...",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "assets/spfx-taskrunner.png",
   "publisher": "eliostruyf",
   "contributors": [
@@ -47,6 +47,10 @@
       {
         "command": "spfxTaskRunner.serve",
         "title": "SPFx start local server"
+      },
+      {
+        "command": "spfxTaskRunner.pickTask",
+        "title": "Pick a task to run"
       }
     ],
     "menus": {
@@ -69,6 +73,11 @@
           "when": "spfxProjectCheck",
           "command": "spfxTaskRunner.pkgRelease",
           "group": "gulpTasks@4"
+        },
+        {
+          "when": "spfxProjectCheck",
+          "command": "spfxTaskRunner.pickTask",
+          "group": "gulpTasks@5"
         }
       ]
     }
