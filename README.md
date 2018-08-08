@@ -16,7 +16,7 @@ If you want to know which `gulp` tasks are available, you can click on the `List
 
 ![Gulp tasks](./assets/gulp-tasks.png)
 
-You can also pick one of the available gulp tasks by clicking on `Pick a task to run`. This gives you a list of available tasks of which you can pick one to run:
+You can also pick one of the available gulp tasks by clicking on `Pick a task to run`. This gives you a list of available tasks of which you can pick one to run (optionally you can choose or pass in arguments):
 
 ![Pick a task and run](./assets/pick-task-vscode.gif)
 

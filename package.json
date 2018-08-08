@@ -2,7 +2,7 @@
   "name": "vscode-spfx-task-runner",
   "displayName": "SPFx Task Runner",
   "description": "Easily run SPFx tasks to spin up the server, package the solution and more...",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "icon": "assets/spfx-taskrunner.png",
   "publisher": "eliostruyf",
   "contributors": [

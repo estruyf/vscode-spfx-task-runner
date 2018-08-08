@@ -102,18 +102,40 @@ export class TaskRunner {
     const pickedTask = await vscode.window.showQuickPick(tasks.map(t => t.name), { canPickMany: false, placeHolder: "Pick the task to run"});
     // Check if a task was picked
     if (pickedTask) {
-      vscode.window.showInformationMessage(`Starting the ${pickedTask} task`);
-      try {
-        const task = tasks.find(t => t.name === pickedTask);
-        if (task) {
-          await vscode.tasks.executeTask(task);
-        } else {
-          vscode.window.showErrorMessage(`Didn't find the selected task...`);
+      let argument: string | null | undefined = null;
+      if (pickedTask === "serve") {
+        argument = await vscode.window.showQuickPick(["", "--nobrowser"], { canPickMany: false, placeHolder: "Choose the task argument"});
+      } else if (pickedTask === "default" || pickedTask === "build" || pickedTask === "bundle" || pickedTask === "package-solution") {
+        argument = await vscode.window.showQuickPick(["", "--ship"], { canPickMany: false, placeHolder: "Choose the task argument"});
+      } else if (pickedTask === "clean" || pickedTask === "trust-dev-cert" || pickedTask === "untrust-dev-cert") {
+        argument = null;
+      } else {
+        argument = await vscode.window.showInputBox({ placeHolder: "Provide optional arguments for your task to run" });
+      }
+
+      const fullTask = `gulp ${pickedTask}${argument ? ` ${argument}`: ""}`;
+      vscode.window.showInformationMessage(`Starting the "${fullTask}" task`);
+      const task: vscode.Task | undefined = tasks.find(t => t.name === pickedTask);
+      if (task) {
+        try {
+          // Check if argument was provided
+          if (argument) {
+            const taskCmd = (task.execution as any)["commandLine"];
+            // Creat a new terminal session to run the command because you cannot pass arguments to existing tasks
+            const terminal = vscode.window.createTerminal(`Task - ${pickedTask}`);
+            terminal.show(true);
+            terminal.sendText(`${taskCmd} ${argument}`);
+          } else {
+            // No arguments provided, so the task can run as defined
+            await vscode.tasks.executeTask(task);
+          }
+        } catch (error) {
+          if (error.stack) {
+            vscode.window.showErrorMessage(error.stack);
+          }
         }
-      } catch (error) {
-        if (error.stack) {
-          vscode.window.showErrorMessage(error.stack);
-        }
+      } else {
+        vscode.window.showErrorMessage(`Didn't find the selected task...`);
       }  
     }
   }
