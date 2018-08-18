@@ -80,7 +80,7 @@ export class TaskRunner {
     const tasks = await vscode.tasks.fetchTasks({ type: TASKRUNNER_TYPE });
     let serveTask = tasks.find(t => t.name === `serve`);
     if (serveTask) {
-      vscode.window.showInformationMessage(`Starting serving the local server`);
+      vscode.window.showInformationMessage(`Start serving the local server`);
       
       try {
         await vscode.tasks.executeTask(serveTask); 
