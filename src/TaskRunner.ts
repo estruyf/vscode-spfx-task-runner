@@ -44,14 +44,22 @@ export class TaskRunner {
     // Get the type of task to execute
     const taskType = release ? TASKRUNNER_RELEASE : TASKRUNNER_DEBUG;
     // Retrieve the right build an packaging tasks
-    const buildTask = tasks.find(t => t.name === `${taskType} bundle`);
+    const cleanTask = tasks.find(t => t.name === `clean`);
+    const bundleTask = tasks.find(t => t.name === `${taskType} bundle`);
     const pkgTask = tasks.find(t => t.name === `${taskType} packaging`);
     // Check if the tasks were retrieved
-    if (buildTask && pkgTask) {
+    if (cleanTask && bundleTask && pkgTask) {
       vscode.window.showInformationMessage(`Creating ${taskType} solution package`);
       
       // Check when bundling completed and run the package-solution task
       vscode.tasks.onDidEndTask(async (e) => {
+        if (e.execution.task.name === `clean`) {
+          if (bundleTask) {
+            // Execute the packaging task
+            await vscode.tasks.executeTask(bundleTask);
+          }
+        }
+
         if (e.execution.task.name === `${taskType} bundle`) {
           if (pkgTask) {
             // Execute the packaging task
@@ -62,7 +70,7 @@ export class TaskRunner {
 
       try {
         // Execute the bundle task
-        await vscode.tasks.executeTask(buildTask); 
+        await vscode.tasks.executeTask(cleanTask); 
       } catch (error) {
         if (error.stack) {
           vscode.window.showErrorMessage(error.stack);

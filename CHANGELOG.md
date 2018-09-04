@@ -1,5 +1,15 @@
 # Change Log
 
+## [1.1.0] - 2018-09-04
+
+**Enhancement**
+
+- Added `gulp clean` to the `Create release package` command
+
+**Fixes**
+
+- Fix for `undefined` task type
+
 ## [1.0.0] - 2018-08-08
 
 **Enhancement**

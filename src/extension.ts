@@ -1,24 +1,27 @@
 'use strict';
 import * as vscode from 'vscode';
 import { TaskRunner } from './TaskRunner';
-import { SPFxTaskProvider } from '.';
+import { SPFxTaskProvider, TASKRUNNER_TYPE } from '.';
 
 let taskProvider: vscode.Disposable | undefined;
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+  let spfxFncs: vscode.Task[] | undefined = undefined;
+
   // Retrieve the gulp path and register the task provider
-  SPFxTaskProvider.gulpPath().then(gulpCmd => {
-    // Register the SPFx task provider
-    taskProvider = vscode.workspace.registerTaskProvider('spfx', {
-      provideTasks: () => {
-        return SPFxTaskProvider.get(gulpCmd);
-      },
-      resolveTask(_task: vscode.Task): vscode.Task | undefined {
-        return undefined;
+  const gulpCmd = await SPFxTaskProvider.gulpPath();
+
+  // Register the SPFx task provider
+  taskProvider = vscode.workspace.registerTaskProvider(TASKRUNNER_TYPE, {
+    provideTasks: () => {
+      if (!spfxFncs) {
+        spfxFncs = SPFxTaskProvider.get(gulpCmd);
       }
-    });
-    // Log that the extension is active
-    console.log('SPFx Task Runner is now active!');
+      return spfxFncs;
+    },
+    resolveTask(task: vscode.Task): vscode.Task | undefined {
+      return task;
+    }
   });
   
   // List all available gulp tasks
@@ -51,12 +54,16 @@ export function activate(context: vscode.ExtensionContext) {
   
   // Register all actions
   context.subscriptions.push(
+    taskProvider,
     taskList,
     pkgDebug,
     pkgRelease,
     serve,
     pickTask
   );
+  
+  // Log that the extension is active
+  console.log('SPFx Task Runner is now active!');
 }
 
 // this method is called when your extension is deactivated

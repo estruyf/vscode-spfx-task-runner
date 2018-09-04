@@ -35,6 +35,10 @@ export class SPFxTaskProvider {
     return [
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
+        task: `clean` 
+      }, `clean`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} clean`)),
+      new vscode.Task({ 
+        type: TASKRUNNER_TYPE, 
         task: `${TASKRUNNER_DEBUG} bundle` 
       }, `${TASKRUNNER_DEBUG} bundle`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} bundle`)),
       new vscode.Task({ 
