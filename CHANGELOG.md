@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.1] - 2018-09-04
+
+**Fix**
+
+- Packaging tasks did not correctly initiate its dependent tasks
+
 ## [1.1.0] - 2018-09-04
 
 **Enhancement**
