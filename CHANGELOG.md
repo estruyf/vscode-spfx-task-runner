@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.0] - 2019-02-07
+
+**Enhancement**
+
+- Added support for multi-root workspaces
+
 ## [1.1.1] - 2018-09-04
 
 **Fix**

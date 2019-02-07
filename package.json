@@ -2,7 +2,7 @@
   "name": "vscode-spfx-task-runner",
   "displayName": "SPFx Task Runner",
   "description": "Easily run SPFx tasks to spin up the server, package the solution and more...",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "icon": "assets/spfx-taskrunner.png",
   "publisher": "eliostruyf",
   "contributors": [
@@ -35,14 +35,14 @@
       {
         "type": "SPFx",
         "required": [
-					"task"
-				],
-				"properties": {
-					"task": {
-						"type": "string",
-						"description": "The SPFx task to run"
-					}
-				}
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The SPFx task to run"
+          }
+        }
       }
     ],
     "commands": [
@@ -104,10 +104,10 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "tslint": "^5.8.0",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.10.25",
+    "tslint": "5.12.1",
+    "typescript": "3.3.1",
+    "vscode": "1.1.29"
   }
 }

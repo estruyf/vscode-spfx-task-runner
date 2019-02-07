@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { GulpPaths } from './models/GulpPaths';
 
 export const TASKRUNNER_TYPE = "SPFx";
 export const TASKRUNNER_DEBUG = "debug";
@@ -9,16 +10,25 @@ export class SPFxTaskProvider {
   /**
    * Retrieves the gulp path
    */
-  public static async gulpPath(): Promise<string | null> {
+  public static async gulpPath(): Promise<GulpPaths | null> {
     // Retrieve the gulp command from the existing commands
     const tasks = await vscode.tasks.fetchTasks({ type: "gulp" });
     if (tasks && tasks.length > 0) {
       const firstTask = tasks[0];
       if (firstTask && firstTask.execution && (firstTask.execution as any)["commandLine"]) {
         // Get the gulp path from the task command line property
-        const cmdLine = (firstTask.execution as any)["commandLine"];
+        let cmdLine: string = (firstTask.execution as any)["commandLine"];
+        let folderPath: string = "";
+        // Check if extension is loaded in a workspace
+        if (firstTask.execution.options && (firstTask.execution.options as any)["cwd"]) {
+          folderPath = (firstTask.execution.options as any)["cwd"];
+        }
+        // Return the gulp execution path
         if (cmdLine) {
-          return cmdLine.split(" ")[0];
+          return {
+            executePath: cmdLine.split(" ")[0],
+            folderPath
+          };
         }
       }
     }
@@ -28,35 +38,46 @@ export class SPFxTaskProvider {
   /**
    * Returns the task provider registration
    */
-  public static get(gulpCmd: string | null): vscode.Task[] {
-    let gulpCommand = gulpCmd || "gulp";
+  public static get(gulpCmd: GulpPaths | null): vscode.Task[] {
+    let gulpCommand = gulpCmd && gulpCmd.executePath ? gulpCmd.executePath : "gulp";
+    let rootFolder = gulpCmd && gulpCmd.folderPath ? gulpCmd.folderPath : vscode.workspace.rootPath;
+
+    // Retrieve all the workspace folders, and match based on the retrieved command path folder
+    const folders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
+    let taskScope: vscode.TaskScope.Workspace | vscode.WorkspaceFolder = vscode.TaskScope.Workspace;
+    if (folders && folders.length > 0) {
+      const crntFolder = folders.find(f => f.uri.path === rootFolder);
+      if (crntFolder) {
+        taskScope = crntFolder;
+      }
+    }
 
     // Register the tasks
     return [
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
         task: `clean` 
-      }, `clean`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} clean`)),
+      }, taskScope, `clean`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} clean`)),
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
         task: `${TASKRUNNER_DEBUG} bundle` 
-      }, `${TASKRUNNER_DEBUG} bundle`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} bundle`)),
+      }, taskScope, `${TASKRUNNER_DEBUG} bundle`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} bundle`)),
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
         task: `${TASKRUNNER_DEBUG} packaging` 
-      }, `${TASKRUNNER_DEBUG} packaging`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} package-solution`)),
+      }, taskScope, `${TASKRUNNER_DEBUG} packaging`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} package-solution`)),
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
         task: `${TASKRUNNER_RELEASE} bundle` 
-      }, `${TASKRUNNER_RELEASE} bundle`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} bundle --ship`)),
+      }, taskScope, `${TASKRUNNER_RELEASE} bundle`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} bundle --ship`)),
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
-        task: `${TASKRUNNER_RELEASE} packaging` 
-      }, `${TASKRUNNER_RELEASE} packaging`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} package-solution --ship`)),
+        task: `${TASKRUNNER_RELEASE} packaging`
+      }, taskScope, `${TASKRUNNER_RELEASE} packaging`, TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} package-solution --ship`)),
       new vscode.Task({ 
         type: TASKRUNNER_TYPE, 
         task: "serve" 
-      }, "serve", TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} serve --nobrowser`))
+      }, taskScope, "serve", TASKRUNNER_TYPE, new vscode.ShellExecution(`${gulpCommand} serve --nobrowser`))
     ];
   }
 }

@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import { TaskRunner } from './TaskRunner';
 import { SPFxTaskProvider, TASKRUNNER_TYPE } from '.';
+import { GulpPaths } from './models/GulpPaths';
 
 let taskProvider: vscode.Disposable | undefined;
 
@@ -9,13 +10,13 @@ export async function activate(context: vscode.ExtensionContext) {
   let spfxFncs: vscode.Task[] | undefined = undefined;
 
   // Retrieve the gulp path and register the task provider
-  const gulpCmd = await SPFxTaskProvider.gulpPath();
+  const gulpPaths: GulpPaths | null = await SPFxTaskProvider.gulpPath();
 
   // Register the SPFx task provider
   taskProvider = vscode.workspace.registerTaskProvider(TASKRUNNER_TYPE, {
     provideTasks: () => {
       if (!spfxFncs) {
-        spfxFncs = SPFxTaskProvider.get(gulpCmd);
+        spfxFncs = SPFxTaskProvider.get(gulpPaths);
       }
       return spfxFncs;
     },
