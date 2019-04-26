@@ -42,6 +42,13 @@ export class SPFxTaskProvider {
     let gulpCommand = gulpCmd && gulpCmd.executePath ? gulpCmd.executePath : "gulp";
     let rootFolder = gulpCmd && gulpCmd.folderPath ? gulpCmd.folderPath : vscode.workspace.rootPath;
 
+
+    if (process && process.platform && process.platform.toLowerCase() === "windows") {
+      // Escape the command path
+      rootFolder = rootFolder && rootFolder.includes("(") ? rootFolder.replace(/\(/g, "`(") : rootFolder;
+      rootFolder = rootFolder && rootFolder.includes(")") ? rootFolder.replace(/\)/g, "`)") : rootFolder;
+    }
+
     // Retrieve all the workspace folders, and match based on the retrieved command path folder
     const folders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
     let taskScope: vscode.TaskScope.Workspace | vscode.WorkspaceFolder = vscode.TaskScope.Workspace;

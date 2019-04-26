@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.1] - 2019-04-26
+
+**Fix**
+
+- Path escaping for Windows when `(` or `)` characters are used
+
 ## [1.2.0] - 2019-02-07
 
 **Enhancement**
