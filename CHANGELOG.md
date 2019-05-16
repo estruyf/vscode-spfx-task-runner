@@ -1,10 +1,16 @@
 # Change Log
 
+## [1.2.2] - 2019-05-16
+
+**Fix**
+
+- Path escaping for Windows when `(` or `)` characters are used in the gulp path
+
 ## [1.2.1] - 2019-04-26
 
 **Fix**
 
-- Path escaping for Windows when `(` or `)` characters are used
+- Path escaping for Windows when `(` or `)` characters are used in the root folder path
 
 ## [1.2.0] - 2019-02-07
 

@@ -41,10 +41,11 @@ export class SPFxTaskProvider {
   public static get(gulpCmd: GulpPaths | null): vscode.Task[] {
     let gulpCommand = gulpCmd && gulpCmd.executePath ? gulpCmd.executePath : "gulp";
     let rootFolder = gulpCmd && gulpCmd.folderPath ? gulpCmd.folderPath : vscode.workspace.rootPath;
-
-
+    
+    // Escape the command path on Windows
     if (process && process.platform && process.platform.toLowerCase() === "windows") {
-      // Escape the command path
+      gulpCommand = gulpCommand && gulpCommand.includes("(") ? gulpCommand.replace(/\(/g, "`(") : gulpCommand;
+      gulpCommand = gulpCommand && gulpCommand.includes(")") ? gulpCommand.replace(/\)/g, "`)") : gulpCommand;
       rootFolder = rootFolder && rootFolder.includes("(") ? rootFolder.replace(/\(/g, "`(") : rootFolder;
       rootFolder = rootFolder && rootFolder.includes(")") ? rootFolder.replace(/\)/g, "`)") : rootFolder;
     }
