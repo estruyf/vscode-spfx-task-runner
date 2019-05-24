@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.3] - 2019-05-16
+
+**Fix**
+
+- Reverting fix in `1.2.2` to find a better way to escape the characters
+
 ## [1.2.2] - 2019-05-16
 
 **Fix**
