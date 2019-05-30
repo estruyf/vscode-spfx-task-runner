@@ -43,12 +43,12 @@ export class SPFxTaskProvider {
     let rootFolder = gulpCmd && gulpCmd.folderPath ? gulpCmd.folderPath : vscode.workspace.rootPath;
     
     // Escape the command path on Windows
-    // if (process && process.platform && process.platform.toLowerCase() === "windows") {
-    //   gulpCommand = gulpCommand && gulpCommand.includes("(") ? gulpCommand.replace(/\(/g, "`(") : gulpCommand;
-    //   gulpCommand = gulpCommand && gulpCommand.includes(")") ? gulpCommand.replace(/\)/g, "`)") : gulpCommand;
-    //   rootFolder = rootFolder && rootFolder.includes("(") ? rootFolder.replace(/\(/g, "`(") : rootFolder;
-    //   rootFolder = rootFolder && rootFolder.includes(")") ? rootFolder.replace(/\)/g, "`)") : rootFolder;
-    // }
+    if (process && process.platform && process.platform.toLowerCase() === "win32") {
+      gulpCommand = gulpCommand && gulpCommand.includes("(") ? gulpCommand.replace(/\(/g, "`(") : gulpCommand;
+      gulpCommand = gulpCommand && gulpCommand.includes(")") ? gulpCommand.replace(/\)/g, "`)") : gulpCommand;
+      rootFolder = rootFolder && rootFolder.includes("(") ? rootFolder.replace(/\(/g, "`(") : rootFolder;
+      rootFolder = rootFolder && rootFolder.includes(")") ? rootFolder.replace(/\)/g, "`)") : rootFolder;
+    }
 
     // Retrieve all the workspace folders, and match based on the retrieved command path folder
     const folders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;

@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.4] - 2019-05-30
+
+**Fix**
+
+- Escaping folder and gulp paths on the `win32` platform
+
 ## [1.2.3] - 2019-05-16
 
 **Fix**
